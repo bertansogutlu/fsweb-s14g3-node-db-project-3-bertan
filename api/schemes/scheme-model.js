@@ -19,11 +19,11 @@ function find() {
     Bu işlevden elde edilen veri kümesini döndürün.
   */
   return db("schemes as sc")
-  .leftJoin('steps as st','sc.scheme_id','st.scheme_id')
-  .select('sc.*')
-  .count('st.step_id as number_of_steps')
-  .groupBy('sc.scheme_id')
-  .orderBy('sc.scheme_id ASC')
+    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+    .select("sc.*")
+    .count("st.step_id as number_of_steps")
+    .groupBy("sc.scheme_id")
+    .orderBy("sc.scheme_id", "asc");
 }
 
 async function findById(scheme_id) {
@@ -94,33 +94,33 @@ async function findById(scheme_id) {
       }
   */
 
-const schemeWithSteps = await db('schemes as sc')
-.leftJoin('steps as st','sc.scheme_id','st.scheme_id')
-.select('sc.scheme_name','st.*')
-.where('sc.scheme_id',scheme_id)
-.orderBy('st.step_number ASC')
+  const schemeWithSteps = await db("schemes as sc")
+    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+    .select("sc.scheme_name", "st.*")
+    .where("sc.scheme_id", scheme_id)
+    .orderBy("st.step_number", "asc");
+  
+  if (schemeWithSteps.length === 0) {
+    return null;
+  }
 
-if(!schemeWithSteps) {
-  return null;
-}
-
-const responseData =     {
-  "scheme_id": scheme_id,
-  "scheme_name": schemeWithSteps[0].scheme_name,
-  "steps": [ ]
-}
-if(schemeWithSteps[0].steps.id === null) {
-return responseData;
-} else {
-  schemeWithSteps.forEach(item => {
-    responseData.steps.push(  {
-      "step_id": item.step_id,
-      "step_number": item.step_number,
-      "instructions": item.instructions
-    })
-  });
-  return responseData;
-}
+  const responseData = {
+    scheme_id: scheme_id,
+    scheme_name: schemeWithSteps[0].scheme_name,
+    steps: [],
+  };
+  if (schemeWithSteps[0].step_id === null) {
+    return responseData;
+  } else {
+    schemeWithSteps.forEach((item) => {
+      responseData.steps.push({
+        step_id: item.step_id,
+        step_number: item.step_number,
+        instructions: item.instructions,
+      });
+    });
+    return responseData;
+  }
 }
 
 async function findSteps(scheme_id) {
@@ -146,17 +146,17 @@ async function findSteps(scheme_id) {
       ]
   */
 
-      const schemeWithSteps = await db('schemes as sc')
-      .leftJoin('steps as st','sc.scheme_id','st.scheme_id')
-      .select('sc.scheme_name','sc.step_number','sc.instructions','sc.step_id')
-      .where('sc.scheme_id',scheme_id)
-      .orderBy('st.step_number ASC')
+  const schemeWithSteps = await db("schemes as sc")
+    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+    .select("sc.scheme_name", "sc.step_number", "sc.instructions", "sc.step_id")
+    .where("sc.scheme_id", scheme_id)
+    .orderBy("st.step_number","asc");
 
-      if(!schemeWithSteps.step_id[0]){
-        return [];
-      } else {
-        return schemeWithSteps;
-      }
+  if (!schemeWithSteps.step_id[0]) {
+    return [];
+  } else {
+    return schemeWithSteps;
+  }
 }
 
 async function add(scheme) {
@@ -164,8 +164,8 @@ async function add(scheme) {
   /*
     1D- Bu işlev yeni bir şema oluşturur ve _yeni oluşturulan şemaya çözümlenir.
   */
- const insertedSchemeId = await db('schemes').insert(scheme);
- return await findById(insertedSchemeId);
+  const insertedSchemeId = await db("schemes").insert(scheme);
+  return await findById(insertedSchemeId);
 }
 
 async function addStep(scheme_id, step) {
@@ -175,8 +175,8 @@ async function addStep(scheme_id, step) {
     ve verilen "scheme_id"ye ait _tüm adımları_ çözer,
     yeni oluşturulan dahil.
   */
- await db('steps').insert({...step, scheme_id});
- return await findSteps(scheme_id);
+  await db("steps").insert({ ...step, scheme_id });
+  return await findSteps(scheme_id);
 }
 
 module.exports = {

@@ -13,7 +13,7 @@ const checkSchemeId = async (req, res, next) => {
 try {
   const isExistScheme = await model.findById(req.params.scheme_id);
   if(!isExistScheme){
-    res.status(404).json({message: `scheme_id ${res.params.scheme_id} id li sema bulunamadi`})
+    res.status(404).json({message: `scheme_id ${req.params.scheme_id} id li sema bulunamadi`})
   } else{
     next();
   }
