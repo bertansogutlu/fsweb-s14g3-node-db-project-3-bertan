@@ -100,6 +100,10 @@ const schemeWithSteps = await db('schemes as sc')
 .where('sc.scheme_id',scheme_id)
 .orderBy('st.step_number ASC')
 
+if(!schemeWithSteps) {
+  return null;
+}
+
 const responseData =     {
   "scheme_id": scheme_id,
   "scheme_name": schemeWithSteps[0].scheme_name,
