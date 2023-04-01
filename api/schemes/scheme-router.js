@@ -82,10 +82,8 @@ router.get('/:scheme_id', checkSchemeId, (req, res, next) => {
     }
   ]
 */
-router.get('/:scheme_id/steps', checkSchemeId, (req, res, next) => {
-  const { scheme_id } = req.params
-
-  Schemes.findSteps(scheme_id)
+router.get('/:scheme_id/steps',checkSchemeId, async (req, res, next) => {
+  await Schemes.findSteps(req.params.scheme_id)
     .then(steps => {
       res.json(steps)
     })
@@ -130,11 +128,9 @@ router.post('/', validateScheme, (req, res, next) => {
     }
   ]
 */
-router.post('/:scheme_id/steps', checkSchemeId, validateStep, (req, res, next) => {
-  const step = req.body
-  const { scheme_id } = req.params
+router.post('/:scheme_id/steps', checkSchemeId, validateStep, async (req, res, next) => {
 
-  Schemes.addStep(scheme_id, step)
+  await Schemes.addStep(req.params.scheme_id, req.body)
     .then(allSteps => {
       res.status(201).json(allSteps)
     })

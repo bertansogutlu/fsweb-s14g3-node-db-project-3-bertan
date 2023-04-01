@@ -148,11 +148,11 @@ async function findSteps(scheme_id) {
 
   const schemeWithSteps = await db("schemes as sc")
     .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
-    .select("sc.scheme_name", "sc.step_number", "sc.instructions", "sc.step_id")
+    .select("st.step_id", "st.step_number", "st.instructions", "sc.scheme_name")
     .where("sc.scheme_id", scheme_id)
-    .orderBy("st.step_number","asc");
+    .orderBy("st.step_number","asc")
 
-  if (!schemeWithSteps.step_id[0]) {
+  if (schemeWithSteps[0].step_id === null) {
     return [];
   } else {
     return schemeWithSteps;
@@ -176,7 +176,8 @@ async function addStep(scheme_id, step) {
     yeni oluşturulan dahil.
   */
   await db("steps").insert({ ...step, scheme_id });
-  return await findSteps(scheme_id);
+  newStep = await findSteps(scheme_id);
+  return newStep;
 }
 
 module.exports = {

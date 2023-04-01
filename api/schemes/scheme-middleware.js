@@ -55,7 +55,7 @@ try {
 const validateStep = (req, res, next) => {
 try {
   const {instructions, step_number} = req.body;
-  if(instructions === undefined || typeof(instructions) !== 'string' || step_number === undefined || typeof(step_number) !== 'number'){
+  if(!instructions|| typeof(instructions) !== 'string' || typeof(step_number) !== 'number' || step_number<1){
     res.status(400).json({message: 'Hatalı step'})
   } else {
     next();
