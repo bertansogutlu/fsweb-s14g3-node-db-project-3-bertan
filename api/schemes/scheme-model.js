@@ -105,7 +105,7 @@ async function findById(scheme_id) {
   }
 
   const responseData = {
-    scheme_id: scheme_id,
+    scheme_id: parseInt(scheme_id),
     scheme_name: schemeWithSteps[0].scheme_name,
     steps: [],
   };
@@ -116,7 +116,7 @@ async function findById(scheme_id) {
       responseData.steps.push({
         step_id: item.step_id,
         step_number: item.step_number,
-        instructions: item.instructions,
+        instructions: item.instructions
       });
     });
     return responseData;
@@ -165,7 +165,7 @@ async function add(scheme) {
     1D- Bu işlev yeni bir şema oluşturur ve _yeni oluşturulan şemaya çözümlenir.
   */
   const insertedSchemeId = await db("schemes").insert(scheme);
-  return await findById(insertedSchemeId);
+  return await findById(insertedSchemeId[0]);
 }
 
 async function addStep(scheme_id, step) {

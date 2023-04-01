@@ -13,7 +13,7 @@ const checkSchemeId = async (req, res, next) => {
 try {
   const isExistScheme = await model.findById(req.params.scheme_id);
   if(!isExistScheme){
-    res.status(404).json({message: `scheme_id ${req.params.scheme_id} id li sema bulunamadi`})
+    res.status(404).json({message: `scheme_id ${req.params.scheme_id} id li şema bulunamadı`})
   } else{
     next();
   }
@@ -33,8 +33,8 @@ try {
 const validateScheme = (req, res, next) => {
 try {
   const {scheme_name} = req.body;
-  if(!scheme_name){
-    res.status(400).json({message: 'Gecersiz sheme_name'})
+  if(scheme_name === undefined || scheme_name === null || typeof(scheme_name) !== 'string'){
+    res.status(400).json({message: 'Geçersiz scheme_name'})
   } else {
     next();
   }
@@ -56,7 +56,7 @@ const validateStep = (req, res, next) => {
 try {
   const {instructions, step_number} = req.body;
   if(instructions === undefined || typeof(instructions) !== 'string' || step_number === undefined || typeof(step_number) !== 'number'){
-    res.status(400).json({message: 'Hatali step'})
+    res.status(400).json({message: 'Hatalı step'})
   } else {
     next();
   }
